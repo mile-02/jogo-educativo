@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Desafio Divertido</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #f0f8ff;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #ff6600;
+    }
+    .box {
+      background: #fffbe6;
+      border: 2px solid #ffd700;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      width: 80%;
+      max-width: 400px;
+    }
+    input {
+      padding: 10px;
+      font-size: 18px;
+      margin: 10px;
+      width: 80%;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #mensagem {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎲 Desafio Divertido 🎲</h1>
+
+  <div class="box">
+    <p id="palavra">Palavra: </p>
+    <input type="text" id="respostaPalavra" placeholder="Digite a palavra certa">
+  </div>
+
+  <div class="box">
+    <p id="conta">Conta: </p>
+    <input type="number" id="respostaConta" placeholder="Digite o resultado">
+  </div>
+
+  <button onclick="verificar()">Verificar</button>
+
+  <div id="mensagem"></div>
+  <p>Pontuação: <span id="pontos">0</span></p>
+
+  <script>
+    const palavras = ["gato", "casa", "pato", "mesa", "livro", "bola", "sapato", "papel"];
+    let palavraCorreta = "";
+    let respostaCertaConta = 0;
+    let pontos = 0;
+
+    function embaralhar(palavra) {
+      return palavra.split('').sort(() => 0.5 - Math.random()).join('');
+    }
+
+    function novaRodada() {
+      // Palavra
+      palavraCorreta = palavras[Math.floor(Math.random() * palavras.length)];
+      const embaralhada = embaralhar(palavraCorreta);
+      document.getElementById("palavra").innerText = `Palavra: ${embaralhada}`;
+
+      // Conta
+      let a = Math.floor(Math.random() * 10) + 1;
+      let b = Math.floor(Math.random() * 10) + 1;
+      if (Math.random() > 0.5) {
+        respostaCertaConta = a + b;
+        document.getElementById("conta").innerText = `Conta: ${a} + ${b}`;
+      } else {
+        if (b > a) [a, b] = [b, a];
+        respostaCertaConta = a - b;
+        document.getElementById("conta").innerText = `Conta: ${a} - ${b}`;
+      }
+
+      // Limpar inputs
+      document.getElementById("respostaPalavra").value = "";
+      document.getElementById("respostaConta").value = "";
+      document.getElementById("mensagem").innerText = "";
+    }
+
+    function verificar() {
+      const respostaPalavra = document.getElementById("respostaPalavra").value.toLowerCase();
+      const respostaConta = parseInt(document.getElementById("respostaConta").value);
+
+      if (respostaPalavra === palavraCorreta && respostaConta === respostaCertaConta) {
+        pontos++;
+        document.getElementById("mensagem").innerText = "🎉 Muito bem!";
+        document.getElementById("mensagem").style.color = "green";
+      } else {
+        document.getElementById("mensagem").innerText = "❌ Tente de novo!";
+        document.getElementById("mensagem").style.color = "red";
+      }
+
+      document.getElementById("pontos").innerText = pontos;
+      setTimeout(novaRodada, 1500);
+    }
+
+    // Iniciar primeira rodada
+    novaRodada();
+  </script>
+</body>
+</html>
